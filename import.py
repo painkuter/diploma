@@ -8,15 +8,12 @@ seporator = "====================================================="
 from os import listdir
 from os.path import isfile, join
 
-files = [f for f in listdir(path)]
-
-# start_date =
-
-# last_date = datetime.datetime(year=2014, month=1, day=1)
-last_date = None
-last_price = 0
+files = sorted(listdir(path))
 
 data = dict()  # map
+
+last_date = None
+last_price = 0
 
 for file in files:
     print(file)
@@ -32,21 +29,23 @@ for file in files:
     except KeyError:
         draft_ws = wb.create_sheet(title=draft)
 
-
     i = 0
     j = 1
     for row in ws.rows:
 
+
         i += 1
 
-        if i > 7:  # ignore header
+        if i > 8:  # ignore header and first row
 
-            if (type(row[1].value) is float) & (type(row[0].value) is datetime.datetime):
+            if (type(row[1].value) in [float,  int]) & (type(row[0].value) is datetime.datetime):
+
                 date = row[0].value
                 price = str(row[1].value)
 
                 if i == 9:
                     last_date = date
+
                 else:
                     if date != last_date - datetime.timedelta(days=1):
 
@@ -57,7 +56,7 @@ for file in files:
                             new_date = last_date - datetime.timedelta(days=k)
                             print(str(new_date) + " price: " + str(last_price))
                             draft_ws["A" + str(j)] = new_date.date()
-                            draft_ws["B" + str(j)] = last_price
+                            draft_ws["B" + str(j)] = str(last_price)
                             j += 1
 
                 draft_ws["A" + str(j)] = date.date()
@@ -74,5 +73,5 @@ for file in files:
 
 print()
 
-for key in data.keys():
+for key in sorted(data.keys()):
     print(key + ": " + str(data[key]))
