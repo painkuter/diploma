@@ -41,7 +41,7 @@ for file in files:
             if (type(row[1].value) in [float,  int]) & (type(row[0].value) is datetime.datetime):
 
                 date = row[0].value
-                price = str(row[1].value)
+                price = row[1].value
 
                 if i == 9:
                     last_date = date
@@ -56,7 +56,7 @@ for file in files:
                             new_date = last_date - datetime.timedelta(days=k)
                             print(str(new_date) + " price: " + str(last_price))
                             draft_ws["A" + str(j)] = new_date.date()
-                            draft_ws["B" + str(j)] = str(last_price)
+                            draft_ws["B" + str(j)] = last_price
                             j += 1
 
                 draft_ws["A" + str(j)] = date.date()
