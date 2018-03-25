@@ -13,6 +13,7 @@ files = sorted(listdir(path))
 data = dict()  # map
 
 last_date = None
+first_date = None
 last_price = 0
 
 for file in files:
@@ -33,25 +34,25 @@ for file in files:
     j = 1
     for row in ws.rows:
 
-
         i += 1
 
         if i > 8:  # ignore header and first row
 
-            if (type(row[1].value) in [float,  int]) & (type(row[0].value) is datetime.datetime):
+            if (type(row[1].value) in [float, int]) & (type(row[0].value) is datetime.datetime):
 
                 date = row[0].value
                 price = row[1].value
 
                 if i == 9:
                     last_date = date
+                    first_date = date
 
                 else:
                     if date != last_date - datetime.timedelta(days=1):
 
                         delta = (last_date - date).days
 
-                        print("last day: " + str(last_date) + " date: "+ str(date) + "  delta: " + str(delta))
+                        print("last day: " + str(last_date) + " date: " + str(date) + "  delta: " + str(delta))
                         for k in range(1, delta):
                             new_date = last_date - datetime.timedelta(days=k)
                             print(str(new_date) + " price: " + str(last_price))
@@ -66,12 +67,35 @@ for file in files:
                 last_date = row[0].value
                 last_price = row[1].value
 
-    data[file] = j
+    data[file] = {}
+    data[file]["count"] = j
+    data[file]["first_date"] = first_date.date()
+    data[file]["last_date"] = last_date.date()
 
     wb.save(path + "/" + file)
     print(seporator)
 
 print()
 
+max_last_date = last_date.date()
+min_first_date = first_date.date()
+
 for key in sorted(data.keys()):
-    print(key + ": " + str(data[key]))
+    max_last_date = max(data[key]["last_date"], max_last_date)
+    min_first_date = min(data[key]["first_date"], min_first_date)
+    print(key + ": \t" + str(data[key]["count"]) + "\tfirst_date: " + str(
+        data[key]["first_date"]) + "\tlast_date: " + str(data[key]["last_date"]))
+
+print()
+for key in sorted(data.keys()):
+    if data[key]["last_date"] > datetime.datetime(year=2014, month=1, day=1).date():
+        print(key)
+print()
+
+for key in sorted(data.keys()):
+    if data[key]["first_date"] < datetime.datetime(year=2017, month=12, day=27).date():
+        print(key)
+print()
+
+print("max_last_date: " + str(max_last_date))
+print("min_first_date: " + str(min_first_date))

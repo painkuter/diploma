@@ -20,10 +20,6 @@ print(R)
 
 
 
-
-
-
-
 pca = PCA()
 pca.fit(R)
 
