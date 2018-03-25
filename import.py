@@ -2,6 +2,8 @@ import openpyxl as xl
 import datetime
 
 path = "data"
+draft = "Draft"
+seporator = "====================================================="
 
 from os import listdir
 from os.path import isfile, join
@@ -17,13 +19,19 @@ last_price = 0
 data = dict()  # map
 
 for file in files:
+    print(file)
 
     wb = xl.load_workbook(path + "/" + file)
 
     # grab the active worksheet
     ws = wb.active
-    # create new
-    new_ws = wb.create_sheet(title="Draft")
+
+    # create new or open existed
+    try:
+        draft_ws = wb[draft]
+    except KeyError:
+        draft_ws = wb.create_sheet(title=draft)
+
 
     i = 0
     j = 1
@@ -47,21 +55,24 @@ for file in files:
                         print("last day: " + str(last_date) + " date: "+ str(date) + "  delta: " + str(delta))
                         for k in range(1, delta):
                             new_date = last_date - datetime.timedelta(days=k)
-                            print(new_date)
-                            new_ws["A" + str(j)] = new_date.date()
-                            new_ws["B" + str(j)] = last_price
+                            print(str(new_date) + " price: " + str(last_price))
+                            draft_ws["A" + str(j)] = new_date.date()
+                            draft_ws["B" + str(j)] = last_price
                             j += 1
 
-                new_ws["A" + str(j)] = date.date()
-                new_ws["B" + str(j)] = price
+                draft_ws["A" + str(j)] = date.date()
+                draft_ws["B" + str(j)] = price
                 j += 1
 
                 last_date = row[0].value
                 last_price = row[1].value
 
-    data[file] = i
+    data[file] = j
 
     wb.save(path + "/" + file)
+    print(seporator)
+
+print()
 
 for key in data.keys():
     print(key + ": " + str(data[key]))

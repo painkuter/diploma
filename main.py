@@ -1,5 +1,7 @@
 import numpy as np
 
+from sklearn.decomposition import PCA
+
 # import sys
 
 # a = np.arange(15).reshape(3, 5)
@@ -17,6 +19,16 @@ print(R)
 # np.mean() - mathematical expectation
 
 
+
+
+
+
+
+pca = PCA()
+pca.fit(R)
+
+print(pca.explained_variance_)
+
 sigma = []
 mu = []
 z = []
@@ -28,12 +40,12 @@ for Ri in R:
     sigma.append(sigma_i)
     z.append((Ri-mu_i)/sigma_i)
 
-while i < N:
-    while j < N:
-        sigma_S += sigma[i]*sigma[j]*np.mean(z[i])
-
-
-print(mu)
+# while i < N:
+#     while j < N:
+#         sigma_S += sigma[i]*sigma[j]*np.mean(z[i])
+#
+#
+# print(mu)
 
 # E = np.array(np.mean(R), ndmin=2)
 # print(E)
