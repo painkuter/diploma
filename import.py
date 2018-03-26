@@ -57,11 +57,11 @@ for file in files:
                             new_date = last_date - datetime.timedelta(days=k)
                             print(str(new_date) + " price: " + str(last_price))
                             draft_ws["A" + str(j)] = new_date.date()
-                            draft_ws["B" + str(j)] = last_price
+                            draft_ws["B" + str(j)] = 0
                             j += 1
 
                 draft_ws["A" + str(j)] = date.date()
-                draft_ws["B" + str(j)] = price
+                draft_ws["B" + str(j)] = last_price/price-1
                 j += 1
 
                 last_date = row[0].value
@@ -88,12 +88,7 @@ for key in sorted(data.keys()):
 
 print()
 for key in sorted(data.keys()):
-    if data[key]["last_date"] > datetime.datetime(year=2014, month=1, day=1).date():
-        print(key)
-print()
-
-for key in sorted(data.keys()):
-    if data[key]["first_date"] < datetime.datetime(year=2017, month=12, day=27).date():
+    if (data[key]["last_date"] > datetime.datetime(year=2014, month=1, day=1).date()) & (data[key]["first_date"] < datetime.datetime(year=2017, month=12, day=27).date()):
         print(key)
 print()
 
