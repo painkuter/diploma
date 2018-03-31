@@ -1,6 +1,8 @@
 import openpyxl as xl
 import datetime
 
+start_time = datetime.datetime.now()
+
 path = "data"
 draft = "Draft"
 seporator = "====================================================="
@@ -88,9 +90,13 @@ for key in sorted(data.keys()):
 
 print()
 for key in sorted(data.keys()):
-    if (data[key]["last_date"] > datetime.datetime(year=2014, month=1, day=1).date()) & (data[key]["first_date"] < datetime.datetime(year=2017, month=12, day=27).date()):
+    if (data[key]["last_date"] > datetime.datetime(year=2014, month=1, day=1).date()) & (data[key]["first_date"] < datetime.datetime(year=2017, month=12, day=22).date()):
         print(key)
 print()
 
 print("max_last_date: " + str(max_last_date))
 print("min_first_date: " + str(min_first_date))
+
+end_time = datetime.datetime.now()
+print()
+print(end_time - start_time)
