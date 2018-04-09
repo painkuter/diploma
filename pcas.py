@@ -1,15 +1,10 @@
 import openpyxl as xl
 import datetime
-import operator
 import numpy as np
-import sys
 import collections
 from os import listdir
-from os.path import isfile, join
 
-from scipy.constants import value
 from sklearn.decomposition import PCA
-from wheel.signatures.djbec import l
 
 
 def has_duplicates(list_of_values):
