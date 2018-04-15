@@ -6,7 +6,6 @@ from os import listdir
 
 from sklearn.decomposition import PCA
 
-
 def has_duplicates(list_of_values):
     key_map = collections.defaultdict(int)
     for item in list_of_values:
@@ -22,12 +21,13 @@ def has_duplicates(list_of_values):
 start_time = datetime.datetime.now()
 
 max_last_date = datetime.datetime(year=2017, month=12, day=23)
-min_first_date = datetime.datetime(year=2017, month=9, day=8)
+min_first_date = datetime.datetime(year=2015, month=12, day=24)
 
 path = "data"
 
 files = sorted(listdir(path))
 N = len(files)
+print("Files number = ", N)
 R = dict()
 dates = []
 i = 0
@@ -62,6 +62,7 @@ for file in files:
     print(str(i) + ": len = " + str(len(R[i])) + " : " + file)
     i += 1
 
+print("Length R with holidays = ", len(R))
 # Checking array's lengths
 lenR = len(R[0])
 for key in R.keys():
@@ -72,10 +73,9 @@ for key in R.keys():
         setRi = set(R[key])
 
 # Filter working days
-Len = len(R[0])
 working_days = []
 # checking for holiday
-for i in range(0, Len):
+for i in range(0, lenR):
     is_holiday = True
     for j in range(0, N):
         if R[j][i] != 0:
@@ -92,13 +92,13 @@ for day in range(0, n):
 
 arr = []
 R_buf = []
-for i in range(0, Len):
+for i in range(0, lenR):
     for j in range(0, N):
         R_buf.append([])
         for day in working_days:
             if i == day:
                 R_buf[j].append(R[j][day])
-print("Working days:", len(R_buf[0]))
+print("Working days = ", len(R_buf[0]))
 
 R_ = np.array([R_buf[k] for k in range(0, N)])
 
@@ -128,6 +128,9 @@ for Ri in R_:
         l += 1
     z.append(buf)
     t += 1
+print("Length Sigma = ", len(sigma))
+print("Length Mu = ", len(mu))
+print("Length Z = ", len(z))
 
 # PCA
 pca = PCA()
@@ -137,12 +140,14 @@ ksi = pca.explained_variance_
 L = pca.components_
 
 lambda_ = ksi * ksi
+print("Length Lambda = ", len(lambda_))
 omega_n = []
 omega_n.append(lambda_[0])
 
 for l in range(1, len(lambda_)):
     omega_n.append(omega_n[l-1] + lambda_[l])
 
+print("Lenght Omega = ", len(omega_n))
 h = []
 output_ws["D1"] = "h"
 
