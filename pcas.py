@@ -139,7 +139,7 @@ pca.fit(z)
 ksi = pca.explained_variance_
 L = pca.components_
 
-lambda_ = ksi * ksi
+lambda_ = ksi
 print("Length Lambda = ", len(lambda_))
 omega_n = []
 omega_n.append(lambda_[0])
